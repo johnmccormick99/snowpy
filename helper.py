@@ -55,23 +55,32 @@ class ServiceNow:
 
 	def isChangeWindowOpen(self) :
 			
-		response = self.session.get(self.baseurl + '/table/change_request?sys_id=' + self.sysId, auth=(self.username, self.password), headers=self.headers)
+		response = self.session.get(self.baseurl + '/table/change_request?sys_id=' + self.sysId,
+									auth=(self.username, self.password), 
+									headers=self.headers)
 
 		if response.status_code != 200: 
 			print('Status:', response.status_code)
 			exit()
 
-		start_time = json.loads( response.content.decode("UTF-8"))['result'][0]['start_date']
-		end_time   = json.loads( response.content.decode("UTF-8"))['result'][0]['end_date']
-		
+		change_type  = json.loads( response.content.decode("UTF-8"))['result'][0]['type']
+		start_time   = json.loads( response.content.decode("UTF-8"))['result'][0]['start_date']
+		end_time     = json.loads( response.content.decode("UTF-8"))['result'][0]['end_date']
+		assigned_to  = json.loads( response.content.decode("UTF-8"))['result'][0]['assigned_to']
+
+		response     = self.session.get(self.baseurl + '/table/sys_user/' + assigned_to['value'],
+										auth=(self.username, self.password), 
+										headers=self.headers)
+		assigned_user = json.loads( response.content.decode("UTF-8"))['result']['name']
+
 		now   = datetime.datetime.now()
 		start = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
 		end   = datetime.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
 
 		if now > start and now < end:
-			return True
+			return {'change_windowopen': True, 'change_type': change_type, 'assigned_user': assigned_user }
 		else:
-			return False
+			return {'change_windowopen': False, 'change_type': change_type, 'assigned_user': assigned_user }
 
 	def addWorkNotes(self, notes) :
 
