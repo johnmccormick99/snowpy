@@ -13,13 +13,13 @@ def main(argv):
 		print('Passed: User is assigned to the change')
 	else:
 		print('Failed: User is not assigned to the change')
-		#exit()
+		sys.exit(-1)
 
 	if change_window['change_windowopen'] == True:
 		print('Passed: Change window open')
 	else:
 		print('Failed: Not within change window')
-		#exit()
+		sys.exit(-1)
 
 	if change_window['change_type'] == 'emergency':
 		print('Passed: Emergency change ready to implement')
@@ -27,7 +27,7 @@ def main(argv):
 		print('Passed: Ready to implement')
 	else:
 		print('Failed: Not ready to implement')
-		#exit()
+		sys.exit(-1)
 
 if __name__ == "__main__":
    main(sys.argv[1])
