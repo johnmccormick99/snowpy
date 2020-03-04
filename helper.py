@@ -1,8 +1,6 @@
 
 import requests, json
-import base64
 import datetime
-import math
 
 class ServiceNow:
 
