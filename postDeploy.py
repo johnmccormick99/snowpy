@@ -9,4 +9,4 @@ def main(argv):
 	obj.addWorkNotes("Deployment finished")
 
 if __name__ == "__main__":
-   main(sys.argv[1])
+   main(sys.argv[1:])
