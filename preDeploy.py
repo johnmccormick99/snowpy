@@ -1,16 +1,21 @@
-
+import sys
 from helper import ServiceNow
 
-def main():
+def main(argv):
 
-	chg = "CHG0040006"
-	s = ServiceNow(chg)
-	l = s.loopkupChangeRequest(chg)
-	print (l)
-	a = s.approvedState()
-	print (a)
-	o = s.isChangeWindowOpen()
-	print (o)
+	changenumber = argv
+	obj = ServiceNow(changenumber)
+	obj.loopkupChangeRequest(changenumber)
+
+	if obj.approvedState() == 'Implement':
+		print('Passed: Ready to implement')
+	else:
+		print('Failed: Not ready to implement')
+
+	if obj.isChangeWindowOpen() == 'True':
+		print('Passed: Change window open')
+	else:
+		print('Failed: Not within change window')
 
 if __name__ == "__main__":
-   main()
+   main(sys.argv[1])
