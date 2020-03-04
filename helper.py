@@ -1,5 +1,6 @@
 import requests, json
 import datetime
+import sys
 
 class ServiceNow:
 
@@ -26,10 +27,15 @@ class ServiceNow:
 		                            headers=self.headers)
 
 		if response.status_code != 200: 
-			print('Status:', response.status_code, 'Headers:', response.headers, 'Error Response:',response.json())
+			print('Status:', response.status_code)
 			exit()
 
-		self.sysId = json.loads( response.content.decode("UTF-8"))['result'][0]['sys_id']
+		try:
+			self.sysId = json.loads( response.content.decode("UTF-8"))['result'][0]['sys_id']
+		except Exception:
+			print("Unrecognised change number")
+			exit()
+		
 		return( self.sysId )
 
 	def approvedState(self) :
@@ -39,25 +45,20 @@ class ServiceNow:
 		                            headers=self.headers)
 
 		if response.status_code != 200: 
-			print('Status:', response.status_code, 
-			      'Headers:', response.headers, 
-			      'Error Response:',response.json())
+			print('Status:', response.status_code)
 			exit()
 
 		state = json.loads( response.content.decode("UTF-8"))['result'][0]['state']
 		dictionary = {'4' : 'Canceled', '3' : 'Closed', '0' : 'Review', '-1' : 'Implement', '-2' : 'Scheduled', '-3' : 'Authorize', '-4' : 'Assess', '-5' : 'New'}
 
-		d = dictionary[str(state)]
-		return ( d )
+		return ( dictionary[str(state)] )
 
 	def isChangeWindowOpen(self) :
 			
 		response = self.session.get(self.baseurl + '/table/change_request?sys_id=' + self.sysId, auth=(self.username, self.password), headers=self.headers)
 
 		if response.status_code != 200: 
-			print('Status:', response.status_code, 
-			      'Headers:', response.headers, 
-			      'Error Response:',response.json())
+			print('Status:', response.status_code)
 			exit()
 
 		start_time = json.loads( response.content.decode("UTF-8"))['result'][0]['start_date']
@@ -80,7 +81,5 @@ class ServiceNow:
 		                            headers=self.headers)
 	
 		if response.status_code != 200: 
-			print('Status:', response.status_code, 
-			      'Headers:', response.headers, 
-			      'Error Response:',response.json())
+			print('Status:', response.status_code)
 			exit()
