@@ -1,12 +1,12 @@
-
+import sys
 from helper import ServiceNow
 
-def main():
+def main(argv):
 
-	chg = "CHG0040006"
-	s = ServiceNow(chg)
-	l = s.loopkupChangeRequest(chg)
-	s.addWorkNotes("Meow!")
+	changenumber = argv
+	obj = ServiceNow(changenumber)
+	obj.loopkupChangeRequest(changenumber)
+	obj.addWorkNotes("Deployment finished")
 
 if __name__ == "__main__":
-   main()
+   main(sys.argv[1])
