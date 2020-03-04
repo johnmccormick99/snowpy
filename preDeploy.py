@@ -11,7 +11,6 @@ def main():
 	print (a)
 	o = s.isChangeWindowOpen()
 	print (o)
-	s.addWorkNotes("Meow!")
 
 if __name__ == "__main__":
    main()
