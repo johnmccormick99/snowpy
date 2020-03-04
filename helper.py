@@ -45,15 +45,11 @@ class ServiceNow:
 			      'Error Response:',response.json())
 			exit()
 
-		self.state = json.loads( response.content.decode("UTF-8"))['result'][0]['state']
+		state = json.loads( response.content.decode("UTF-8"))['result'][0]['state']
+		dictionary = {'4' : 'Canceled', '3' : 'Closed', '0' : 'Review', '-1' : 'Implement', '-2' : 'Scheduled', '-3' : 'Authorize', '-4' : 'Assess', '-5' : 'New'}
+		d = dictionary[str(state)]
 		
-		dictionary = {'Canceled' : 4, 'Closed' : 3, 'Review' : 0, 'Implement' : -1, 'Scheduled' : -2, 'Authorize' : -3, 'Assess' : -4, 'New' : -5}
-
-		for name, state in dictionary.items():
-			if state == int(self.state):
-				return( name )
-			else:
-				return( state )
+		return ( d )
 
 	def isChangeWindowOpen(self) :
 			
