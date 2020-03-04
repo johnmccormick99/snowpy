@@ -62,8 +62,15 @@ class ServiceNow:
 
 		start_time = json.loads( response.content.decode("UTF-8"))['result'][0]['start_date']
 		end_time   = json.loads( response.content.decode("UTF-8"))['result'][0]['end_date']
+		
+		now   = datetime.datetime.now()
+		start = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+		end   = datetime.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
 
-		return( start_time, end_time )
+		if now > start and now < end:
+			return True
+		else:
+			return False
 
 	def addWorkNotes(self, notes) :
 
