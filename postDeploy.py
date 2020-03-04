@@ -5,7 +5,7 @@ def main(argv):
 
 	changenumber = argv
 	obj = ServiceNow(changenumber)
-	obj.loopkupChangeRequest(changenumber)
+	obj.loopkupChangeRequest()
 	obj.addWorkNotes("Deployment finished")
 
 if __name__ == "__main__":
