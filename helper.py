@@ -1,4 +1,3 @@
-
 import requests, json
 import datetime
 
@@ -7,7 +6,7 @@ class ServiceNow:
 	def __init__(self, chg=''):
 		self.baseurl = 'https://dev94652.service-now.com/api/now'
 		self.username = 'admin'
-		self.password = 'xxx'
+		self.password = ''
 		self.payload = ''
 		self.headers = ''
 		self.sysId = ''
@@ -47,8 +46,8 @@ class ServiceNow:
 
 		state = json.loads( response.content.decode("UTF-8"))['result'][0]['state']
 		dictionary = {'4' : 'Canceled', '3' : 'Closed', '0' : 'Review', '-1' : 'Implement', '-2' : 'Scheduled', '-3' : 'Authorize', '-4' : 'Assess', '-5' : 'New'}
+
 		d = dictionary[str(state)]
-		
 		return ( d )
 
 	def isChangeWindowOpen(self) :
