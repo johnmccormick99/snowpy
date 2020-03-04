@@ -18,7 +18,7 @@ class ServiceNow:
 	def loopkupChangeRequest(self) :
 
 		if( self.chg == '') :
-			exit()
+			sys.exit(-1)
 			
 		response = self.session.get(self.baseurl + '/table/change_request?sysparm_query=number=' + self.chg, 
 		                            auth=(self.username, self.password), 
@@ -26,13 +26,13 @@ class ServiceNow:
 
 		if response.status_code != 200: 
 			print('Status:', response.status_code)
-			exit()
+			sys.exit(-1)
 
 		try:
 			self.sysId = json.loads( response.content.decode("UTF-8"))['result'][0]['sys_id']
 		except Exception:
 			print("Unrecognised change number")
-			exit()
+			sys.exit(-1)
 		
 		return( self.sysId )
 
@@ -44,7 +44,7 @@ class ServiceNow:
 
 		if response.status_code != 200: 
 			print('Status:', response.status_code)
-			exit()
+			sys.exit(-1)
 
 		state = json.loads( response.content.decode("UTF-8"))['result'][0]['state']
 		dictionary = {'4' : 'Canceled', '3' : 'Closed', '0' : 'Review', '-1' : 'Implement', '-2' : 'Scheduled', '-3' : 'Authorize', '-4' : 'Assess', '-5' : 'New'}
@@ -59,7 +59,7 @@ class ServiceNow:
 
 		if response.status_code != 200: 
 			print('Status:', response.status_code)
-			exit()
+			sys.exit(-1)
 
 		change_type  = json.loads( response.content.decode("UTF-8"))['result'][0]['type']
 		start_time   = json.loads( response.content.decode("UTF-8"))['result'][0]['start_date']
@@ -69,6 +69,7 @@ class ServiceNow:
 		response     = self.session.get(self.baseurl + '/table/sys_user/' + assigned_to['value'],
 										auth=(self.username, self.password), 
 										headers=self.headers)
+		
 		assigned_user = json.loads( response.content.decode("UTF-8"))['result']['name']
 
 		now   = datetime.datetime.now()
@@ -89,4 +90,4 @@ class ServiceNow:
 	
 		if response.status_code != 200: 
 			print('Status:', response.status_code)
-			exit()
+			sys.exit(-1)
