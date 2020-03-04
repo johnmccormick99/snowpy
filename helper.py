@@ -15,12 +15,10 @@ class ServiceNow:
 		self.headers = {"Content-Type":"application/json", "Accept":"application/json"}
 		self.session = requests.Session()
 
-	def loopkupChangeRequest(self, chg) :
+	def loopkupChangeRequest(self) :
 
-		if( chg == '') :
+		if( self.chg == '') :
 			exit()
-		
-		self.chg = chg
 			
 		response = self.session.get(self.baseurl + '/table/change_request?sysparm_query=number=' + self.chg, 
 		                            auth=(self.username, self.password), 
