@@ -46,7 +46,14 @@ class ServiceNow:
 			exit()
 
 		self.state = json.loads( response.content.decode("UTF-8"))['result'][0]['state']
-		return( int(self.state) )
+		
+		dictionary = {'Canceled' : 4, 'Closed' : 3, 'Review' : 0, 'Implement' : -1, 'Scheduled' : -2, 'Authorize' : -3, 'Assess' : -4, 'New' : -5}
+
+		for name, state in dictionary.items():
+			if state == int(self.state):
+				return( name )
+			else:
+				return( state )
 
 	def isChangeWindowOpen(self) :
 			
