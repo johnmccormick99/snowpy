@@ -5,7 +5,7 @@ def main(argv):
 
 	changenumber = argv
 	obj = ServiceNow(changenumber)
-	obj.loopkupChangeRequest(changenumber)
+	obj.loopkupChangeRequest()
 	change_window  = obj.isChangeWindowOpen()
 	approval_state = obj.approvedState()
 
