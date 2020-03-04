@@ -28,11 +28,7 @@ class ServiceNow:
 			print('Status:', response.status_code)
 			sys.exit(-1)
 
-		try:
-			self.sysId = json.loads( response.content.decode("UTF-8"))['result'][0]['sys_id']
-		except Exception:
-			print("Unrecognised change number")
-			sys.exit(-1)
+		self.sysId = json.loads( response.content.decode("UTF-8"))['result'][0]['sys_id']
 		
 		return( self.sysId )
 
@@ -60,17 +56,21 @@ class ServiceNow:
 		if response.status_code != 200: 
 			print('Status:', response.status_code)
 			sys.exit(-1)
-
-		change_type  = json.loads( response.content.decode("UTF-8"))['result'][0]['type']
-		start_time   = json.loads( response.content.decode("UTF-8"))['result'][0]['start_date']
-		end_time     = json.loads( response.content.decode("UTF-8"))['result'][0]['end_date']
-		assigned_to  = json.loads( response.content.decode("UTF-8"))['result'][0]['assigned_to']
-
-		response     = self.session.get(self.baseurl + '/table/sys_user/' + assigned_to['value'],
-										auth=(self.username, self.password), 
-										headers=self.headers)
 		
-		assigned_user = json.loads( response.content.decode("UTF-8"))['result']['name']
+		try:
+			change_type  = json.loads( response.content.decode("UTF-8"))['result'][0]['type']
+			start_time   = json.loads( response.content.decode("UTF-8"))['result'][0]['start_date']
+			end_time     = json.loads( response.content.decode("UTF-8"))['result'][0]['end_date']
+			assigned_to  = json.loads( response.content.decode("UTF-8"))['result'][0]['assigned_to']
+
+			response = self.session.get(self.baseurl + '/table/sys_user/' + assigned_to['value'],
+											auth=(self.username, self.password), 
+											headers=self.headers)
+
+			assigned_user = json.loads( response.content.decode("UTF-8"))['result']['name']
+		except Exception:
+			print("Change request fields not populated")
+			sys.exit(-1)
 
 		now   = datetime.datetime.now()
 		start = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')

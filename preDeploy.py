@@ -2,32 +2,32 @@ import sys
 from helper import ServiceNow
 
 def main(argv):
-
-	changenumber = argv
+	changenumber = argv[0]
+	user = argv[1]
 	obj = ServiceNow(changenumber)
 	obj.loopkupChangeRequest()
 	change_window  = obj.isChangeWindowOpen()
 	approval_state = obj.approvedState()
 
-	if change_window['assigned_user'] == 'ITIL User':
-		print('Passed: User is assigned to the change')
+	if change_window['assigned_user'] == user:
+		print('ServiceNow Check - Passed: User is assigned to the change')
 	else:
-		print('Failed: User is not assigned to the change')
+		print('ServiceNow Check - Failed: User is not assigned to the change')
 		sys.exit(-1)
 
 	if change_window['change_windowopen'] == True:
-		print('Passed: Change window open')
+		print('ServiceNow Check - Passed: Change window is open')
 	else:
-		print('Failed: Not within change window')
+		print('ServiceNow Check - Failed: Not within change window')
 		sys.exit(-1)
 
 	if change_window['change_type'] == 'emergency':
-		print('Passed: Emergency change ready to implement')
+		print('ServiceNow Check - Passed: Emergency change ready to implement')
 	elif change_window['change_type'] == 'normal' and approval_state == 'Implement' :
-		print('Passed: Ready to implement')
+		print('ServiceNow Check - Passed: Ready to implement')
 	else:
-		print('Failed: Not ready to implement')
+		print('ServiceNow Check - Failed: Not ready to implement')
 		sys.exit(-1)
 
 if __name__ == "__main__":
-   main(sys.argv[1])
+   main(sys.argv[1:])
