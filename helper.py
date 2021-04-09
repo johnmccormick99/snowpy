@@ -7,7 +7,7 @@ class ServiceNow:
 	def __init__(self, chg=''):
 		self.baseurl = 'https://dev94652.service-now.com/api/now'
 		self.username = 'admin'
-		self.password = 'zHdu9GFIh5Jo'
+		self.password = 'hellojmac'
 		self.payload = ''
 		self.headers = ''
 		self.sysId = ''
